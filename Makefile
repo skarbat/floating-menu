@@ -5,7 +5,7 @@
 #
 
 CXXFLAGS = -Wall -c -DHAVE_OPENGL -DBCMHOST=1 -std=c++11
-LDFLAGS = -lSDL2 -lSDL2_image
+LDFLAGS = -lSDL2
 
 app = floating-menu
 

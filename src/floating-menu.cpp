@@ -4,11 +4,10 @@
 
 #include <iostream>
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
 
 using namespace std;
 
-#define IMAGE_FILENAME "images/home.png"
+#define IMAGE_FILENAME "images/home.bmp"
 
 int main(void)
 {
@@ -34,7 +33,7 @@ int main(void)
     }
 
     std::string imagePath = IMAGE_FILENAME;
-    SDL_Surface *bmp = IMG_Load(imagePath.c_str());
+    SDL_Surface *bmp = SDL_LoadBMP(imagePath.c_str());
     if (bmp == nullptr){
         SDL_DestroyRenderer(ren);
         SDL_DestroyWindow(win);
@@ -68,14 +67,19 @@ int main(void)
       SDL_RenderCopyEx(ren, tex, NULL, NULL, 0L, NULL, SDL_FLIP_HORIZONTAL);
       SDL_RenderPresent(ren);
       SDL_Delay(delay);
-      //frotate += 0.5f;
 
       while (SDL_PollEvent (&event)) {
-	if (event.type == SDL_KEYDOWN) {
+	switch (event.type) {
+
+	case SDL_KEYDOWN:
 	  if (event.key.keysym.sym == SDLK_ESCAPE) {
 	    SDL_Quit();
 	    runrun=false;
 	  }
+
+	case SDL_MOUSEMOTION: //SDL_MouseMotionEvent:
+	  break;
+
 	}
       }
     }
