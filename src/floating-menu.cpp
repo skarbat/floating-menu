@@ -17,7 +17,7 @@ int main(void)
     }
 
     // top left window
-    SDL_Window *win = SDL_CreateWindow("FloatingMenu", 0, 0, 128, 128, SDL_WINDOW_SHOWN);
+    SDL_Window *win = SDL_CreateWindow("FloatingMenu", 0, 0, 128, 128, /* SDL_WINDOW_HIDDEN */ SDL_WINDOW_SHOWN);
     if (win == nullptr){
         std::cout << "SDL_CreateWindow Error: " << SDL_GetError() << std::endl;
         SDL_Quit();
@@ -69,18 +69,19 @@ int main(void)
       SDL_Delay(delay);
 
       while (SDL_PollEvent (&event)) {
-	switch (event.type) {
-
-	case SDL_KEYDOWN:
-	  if (event.key.keysym.sym == SDLK_ESCAPE) {
-	    SDL_Quit();
-	    runrun=false;
-	  }
-
-	case SDL_MOUSEMOTION: //SDL_MouseMotionEvent:
-	  break;
-
-	}
+          switch (event.type)
+              {
+              case SDL_KEYDOWN:
+                  if (event.key.keysym.sym == SDLK_ESCAPE) {
+                      printf("byebye\n");
+                      SDL_Quit();
+                      runrun=false;
+                  }
+                  
+              case SDL_MOUSEMOTION: //SDL_MouseMotionEvent:
+                  printf ("mouse moving\n");
+                  break;
+              }
       }
     }
 
