@@ -5,12 +5,36 @@
 #include <iostream>
 #include <SDL2/SDL.h>
 
+#include <fcntl.h>
+#include <linux/input.h>
+
 using namespace std;
 
 #define IMAGE_FILENAME "images/home.bmp"
 
-int main(void)
+int main(int argc, char *argv[])
 {
+
+    bool grab=false;
+
+    if ((argc > 1) && !(strcmp(argv[1], "--grab"))) {
+        printf ("enabling grab\n");
+        grab=true;
+    }
+
+
+    if (grab) {
+        // grab keyboard & mouse
+        int fevdev0, result;
+        fevdev0=open("/dev/input/event1", O_RDONLY);
+        if (fevdev0) {
+            result=ioctl(fevdev0, EVIOCGRAB, 1);
+            printf ("grab dev0 rc=%d\n", result);
+        }
+    }
+
+
+    
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0){
         std::cout << "SDL_Init Error: " << SDL_GetError() << std::endl;
         return 1;
@@ -22,6 +46,12 @@ int main(void)
         std::cout << "SDL_CreateWindow Error: " << SDL_GetError() << std::endl;
         SDL_Quit();
         return 1;
+    }
+    else {
+        SDL_SetWindowGrab(win, SDL_TRUE);
+        //SDL_WarpMouse(0, 0);
+        SDL_PumpEvents();
+        //SDL_WM_GrabInput(SDL_GRAB_ON);
     }
 
     SDL_Renderer *ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
@@ -61,6 +91,7 @@ int main(void)
     //float frotate=0.0f;
     int delay=10; // milliseconds
     bool runrun=true;
+
 
     while (runrun) {
 
